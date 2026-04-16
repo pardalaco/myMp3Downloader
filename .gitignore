@@ -1,0 +1,17 @@
+.DS_Store
+.env
+__pycache__/
+*.log
+.pytest_cache/
+.vscode/
+.venv/
+venv/
+ENV/
+env/
+*.sqlite3
+artistas.txt
+*.mp3
+*.m4a
+*.webm
+*.part
+*.tmp

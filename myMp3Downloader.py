@@ -6,7 +6,11 @@ from mutagen.easyid3 import EasyID3
 import mutagen
 
 def analizar_archivo(ruta_archivo):
-    """Lee el archivo txt y crea un diccionario { 'Artista': ['url1', 'url2'] }"""
+    """Lee el archivo txt y crea un diccionario { 'Artista': ['url1', 'url2'] }.
+
+    Se espera que el archivo tenga el nombre del artista en una línea y las URLs
+    debajo de ese nombre. Las líneas en blanco se ignoran.
+    """
     datos = {}
     artista_actual = None
     
@@ -21,6 +25,7 @@ def analizar_archivo(ruta_archivo):
                     if artista_actual:
                         datos[artista_actual].append(linea)
                 else:
+                    # Nueva sección de artista encontrada
                     artista_actual = linea
                     if artista_actual not in datos:
                         datos[artista_actual] = []
@@ -30,7 +35,12 @@ def analizar_archivo(ruta_archivo):
         return None
 
 def descargar_y_etiquetar(datos, directorio_base):
-    """Descarga las listas y aplica metadatos en la ruta especificada"""
+    """Descarga cada playlist y etiqueta los MP3 resultantes.
+
+    Para cada artista y cada URL encontrada en el diccionario, descarga el audio
+    de YouTube con yt_dlp, lo convierte a MP3 y guarda los archivos en una
+    carpeta organizada por artista y playlist. Luego aplica etiquetas ID3 básicas.
+    """
     
     # Asegurarse de que el directorio base existe
     if not os.path.exists(directorio_base):

@@ -5,7 +5,13 @@ from dotenv import load_dotenv
 from google import genai
 
 def inicializar_cliente():
-    """Carga la API key desde el .env y crea el cliente de la nueva API"""
+    """Carga la API key desde .env y devuelve un cliente Gemini.
+
+    Esta función carga las variables de entorno del archivo .env, comprueba
+    que exista la clave GEMINI_API_KEY y crea un cliente de la nueva API.
+    Si la clave no está presente, muestra un mensaje de error y sale del programa.
+    """
+    # Cargamos variables desde .env para que os.getenv pueda leer GEMINI_API_KEY
     load_dotenv()
     api_key = os.getenv("GEMINI_API_KEY")
     
@@ -14,11 +20,15 @@ def inicializar_cliente():
         print("Por favor, crea un archivo .env y añade tu clave.")
         sys.exit(1)
         
-    # Inicializamos el cliente con el nuevo SDK
+    # Inicializamos el cliente con el nuevo SDK de Gemini
     return genai.Client(api_key=api_key)
 
 def generar_archivo_artista(cliente, artista, archivo_salida):
-    """Se conecta a Gemini usando el nuevo SDK y genera el txt"""
+    """Genera un archivo de texto con las playlists de YouTube para un artista.
+
+    Usa el cliente Gemini para solicitar información del artista y guarda la
+    respuesta formateada en el archivo de salida.
+    """
     
     print(f"Buscando la discografía y listas de reproducción de '{artista}'...")
     print("Conectando con la API de Gemini. Esto puede tardar unos segundos...")

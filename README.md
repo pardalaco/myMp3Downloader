@@ -14,7 +14,7 @@ Script de Python para descargar música de YouTube organizada por artista y play
 1. Clona el repositorio:
 
 ```bash
-git clone https://github.com/anomalyco/myMp3Downloader.git
+git clone https://github.com/pardalaco/myMp3Downloader.git
 cd myMp3Downloader
 ```
 
@@ -29,7 +29,7 @@ pip install -r requirements.txt
 1. Clona el repositorio:
 
 ```bash
-git clone https://github.com/anomalyco/myMp3Downloader.git
+git clone https://github.com/pardalaco/myMp3Downloader.git
 cd myMp3Downloader
 ```
 
@@ -57,9 +57,25 @@ pip install -r requirements.txt
 
 ## Formato del archivo de entrada
 
-Crea un archivo de texto (.txt) con el siguiente formato:
+Basado en `ejemplo.txt`:
 
-**Formato estándar (usa el título de la playlist o "Singles"):**
+```
+Daft Punk
+https://www.youtube.com/watch?v=FGBhQbmPwH8&list=PLSdoVPM5WnndLX6Ngmb8wktMF61dJirKl
+https://www.youtube.com/watch?v=A2VpR8HahKc&list=PLSdoVPM5WnndSQEXRz704yQkKwx76GvPV
+
+Sexy Zebras
+Bravo - https://www.youtube.com/watch?v=ShWKbooOCOA&list=PLz0St4NdoxsaSZK2UOg-BUg7VA2CHZlVv
+https://youtu.be/tMUyEXzhOyQ?si=vRAHyKJSKkKb8LZ3
+```
+
+- **Artista**: Línea con nombre inicia sección (ej. `Daft Punk`).
+- **URL estándar**: `https://...` → usa título de playlist o "Singles".
+- **URL con álbum**: `Nombre Álbum - https://...` → usa el nombre del álbum (ej. `Bravo`).
+- Líneas en blanco se ignoran; mezcla ambos formatos libremente.
+
+**Ejemplo usando playlists:**
+
 ```
 Nombre del Artista
 https://www.youtube.com/playlist?list=XXXXXXXXXXXXXXX
@@ -68,19 +84,6 @@ https://www.youtube.com/watch?v=XXXXXXXXXXX
 Otro Artista
 https://www.youtube.com/playlist?list=YYYYYYYYYYYYYYY
 ```
-
-**Nuevo formato (especifica el nombre del álbum):**
-```
-Nombre del Artista
-Nombre del Álbum - https://www.youtube.com/playlist?list=XXXXXXXXXXXXXXX
-Nombre del Álbum - https://www.youtube.com/watch?v=XXXXXXXXXXX
-```
-
-- Una línea con el nombre del artista
-- Las siguientes líneas con URLs de YouTube (playlists o videos individuales)
-- Para especificar el álbum: `Nombre Álbum - URL`
-- Líneas en blanco se ignoran
-- Puedes mezclar ambos formatos y incluir múltiples artistas
 
 ## Uso
 

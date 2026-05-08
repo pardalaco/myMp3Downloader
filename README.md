@@ -59,6 +59,7 @@ pip install -r requirements.txt
 
 Crea un archivo de texto (.txt) con el siguiente formato:
 
+**Formato estándar (usa el título de la playlist o "Singles"):**
 ```
 Nombre del Artista
 https://www.youtube.com/playlist?list=XXXXXXXXXXXXXXX
@@ -68,10 +69,18 @@ Otro Artista
 https://www.youtube.com/playlist?list=YYYYYYYYYYYYYYY
 ```
 
+**Nuevo formato (especifica el nombre del álbum):**
+```
+Nombre del Artista
+Nombre del Álbum - https://www.youtube.com/playlist?list=XXXXXXXXXXXXXXX
+Nombre del Álbum - https://www.youtube.com/watch?v=XXXXXXXXXXX
+```
+
 - Una línea con el nombre del artista
 - Las siguientes líneas con URLs de YouTube (playlists o videos individuales)
+- Para especificar el álbum: `Nombre Álbum - URL`
 - Líneas en blanco se ignoran
-- Puedes incluir múltiples artistas en el mismo archivo
+- Puedes mezclar ambos formatos y incluir múltiples artistas
 
 ## Uso
 

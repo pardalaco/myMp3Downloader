@@ -1,15 +1,20 @@
 import os
 import sys
 import argparse
+import re
 import yt_dlp
 from mutagen.easyid3 import EasyID3
 import mutagen
 
 def analizar_archivo(ruta_archivo):
-    """Lee el archivo txt y crea un diccionario { 'Artista': ['url1', 'url2'] }.
+    """Lee el archivo txt y crea un diccionario { 'Artista': [(url, album), ...] }.
 
-    Se espera que el archivo tenga el nombre del artista en una línea y las URLs
-    debajo de ese nombre. Las líneas en blanco se ignoran.
+    Formatos soportados:
+    - Artista
+      https://... (usa el título de la playlist o 'Singles')
+    
+    - Artista
+      Nombre Album - https://... (usa 'Nombre Album' como carpeta)
     """
     datos = {}
     artista_actual = None
@@ -21,11 +26,18 @@ def analizar_archivo(ruta_archivo):
                 if not linea:
                     continue
                 
-                if linea.startswith('http://') or linea.startswith('https://'):
+                # Detectar formato: "Nombre Album - URL"
+                match = re.match(r'^(.+?)\s+-\s+(https?://.+)$', linea)
+                if match:
                     if artista_actual:
-                        datos[artista_actual].append(linea)
+                        album = match.group(1).strip()
+                        url = match.group(2).strip()
+                        datos[artista_actual].append((url, album))
+                elif linea.startswith('http://') or linea.startswith('https://'):
+                    if artista_actual:
+                        datos[artista_actual].append((linea, None))
                 else:
-                    # Nueva sección de artista encontrada
+                    # Nueva sección de artista
                     artista_actual = linea
                     if artista_actual not in datos:
                         datos[artista_actual] = []
@@ -47,13 +59,18 @@ def descargar_y_etiquetar(datos, directorio_base):
         os.makedirs(directorio_base)
         print(f"Creada carpeta de destino: {directorio_base}")
 
-    for artista, urls in datos.items():
+    for artista, items in datos.items():
         print(f"\n{'='*60}")
         print(f" PROCESANDO ARTISTA: {artista}")
         print(f"{'='*60}")
         
-        for url in urls:
-            # Plantilla: CarpetaDestino / Artista / NombrePlaylist / Cancion.mp3
+        for url, album in items:
+            # Si se especifica álbum, usarlo; sino usar playlist_title o Singles
+            if album:
+                outtmpl = f'{directorio_base}/{artista}/{album}/%(title)s.%(ext)s'
+            else:
+                outtmpl = f'{directorio_base}/{artista}/%(playlist_title|Singles)s/%(title)s.%(ext)s'
+            
             ydl_opts = {
                 'format': 'bestaudio/best',
                 'postprocessors': [{
@@ -61,7 +78,7 @@ def descargar_y_etiquetar(datos, directorio_base):
                     'preferredcodec': 'mp3',
                     'preferredquality': '192',
                 }],
-                'outtmpl': f'{directorio_base}/{artista}/%(playlist_title|Singles)s/%(title)s.%(ext)s',
+                'outtmpl': outtmpl,
                 'quiet': False,
                 'ignoreerrors': True,
             }

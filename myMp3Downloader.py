@@ -98,7 +98,7 @@ def descargar_y_etiquetar(datos, directorio_base):
                 
             print(f"\nEtiquetando álbum: {nombre_playlist}...")
             for archivo in os.listdir(ruta_playlist):
-                if archivo.endswith('.mp3'):
+                if archivo.endswith('.mp3') and not archivo.startswith('.'):
                     ruta_archivo = os.path.join(ruta_playlist, archivo)
                     try:
                         try:
